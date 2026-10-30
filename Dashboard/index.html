@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DiyaHub — Central Ecosystem Portal</title>
+  <meta name="description" content="DiyaHub Central Dashboard - Unified Multi-Service Gateway for DiyaMart, DiyaTaxi, and Modular Applications" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <script>
+    (function() {
+      try {
+        if (!localStorage.getItem('diyahub_theme_v2')) {
+          localStorage.setItem('diyahub_theme', 'light');
+          localStorage.setItem('diyahub_theme_v2', 'true');
+        }
+        var theme = localStorage.getItem('diyahub_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- MAIN HUB VIEW -->
+  <div id="hub-view">
+    <!-- Sticky Header -->
+    <header class="hub-header">
+      <div class="container nav-wrap">
+        <a href="/" class="brand-badge">
+          <div class="brand-icon-box">⚡</div>
+          <div class="brand-text">
+            <h1>Diya<span>Hub</span></h1>
+            <div class="brand-tagline">Unified Ecosystem Control</div>
+          </div>
+        </a>
+
+        <div class="header-right-actions" style="display: flex; align-items: center; gap: 12px;">
+          <div class="header-status-pill">
+            <span class="pulse-dot"></span>
+            <span>Unified Port :5000</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="container">
+      <section class="hero-section">
+        <div class="hero-chip">
+          <span>🌐</span> Single-Port Multi-Service Platform
+        </div>
+        <h2 class="hero-title">
+          One Hub, <span class="grad">Four Integrated Services</span>
+        </h2>
+        <p class="hero-subtitle">
+          Welcome to the central gateway of DiyaHub. Access your fashion boutique, taxi mobility platform, artisanal bistro & cafe, and social media buzz in one unified portal.
+        </p>
+
+        <!-- Ecosystem Stats -->
+        <div class="ecosystem-stats">
+          <div class="stat-item">
+            <div class="stat-num">4</div>
+            <div class="stat-lbl">Services Available</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">4</div>
+            <div class="stat-lbl">Dedicated Folders</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">1</div>
+            <div class="stat-lbl">Unified Port (:5000)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">100%</div>
+            <div class="stat-lbl">In-Page Experience</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 Services Grid -->
+      <section class="services-grid">
+
+        <!-- SERVICE 1: DIYAMART -->
+        <article class="service-card card-mart" id="card-diyamart" onclick="openService('diyamart')" style="cursor: pointer;">
+          <div class="card-glow"></div>
+          <div class="card-head">
+            <div class="icon-wrapper icon-mart">🛍️</div>
+            <div id="status-mart" class="status-badge status-live">
+              <span class="pulse-dot"></span> Live Online
+            </div>
+          </div>
+
+          <span class="category-tag cat-mart">Service 1 • Retail & Apparel</span>
+          <h3 class="service-title">DiyaMart</h3>
+          <p class="service-desc">
+            Full-featured fashion e-commerce storefront with designer sarees, kurtis, live inventory management across 3 metro boutiques, and real-time bag checkout.
+          </p>
+
+          <ul class="feature-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Pure Silk Sarees & Men's Formal Couture
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              SQLite Catalog & Multi-City Inventory Tracking
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Dedicated Folder: <code>diyamart/</code>
+            </li>
+          </ul>
+
+          <div class="card-actions">
+            <button type="button" class="btn-launch btn-launch-mart" onclick="event.stopPropagation(); openService('diyamart')">
+              <span>Open DiyaMart Website</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <span class="btn-port-badge">
+              /diyamart
+            </span>
+          </div>
+        </article>
+
+        <!-- SERVICE 2: DIYATAXI -->
+        <article class="service-card card-taxi" id="card-diyataxi" onclick="openService('diyataxi')" style="cursor: pointer;">
+          <div class="card-glow"></div>
+          <div class="card-head">
+            <div class="icon-wrapper icon-taxi">🚖</div>
+            <div id="status-taxi" class="status-badge status-live">
+              <span class="pulse-dot"></span> Live Online
+            </div>
+          </div>
+
+          <span class="category-tag cat-taxi">Service 2 • Urban Mobility</span>
+          <h3 class="service-title">DiyaTaxi</h3>
+          <p class="service-desc">
+            High-performance urban taxi-hailing and fleet dispatch platform with interactive ride simulation, dynamic fare calculation, and operations dashboard.
+          </p>
+
+          <ul class="feature-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Interactive Cab Booking & Simulation Engine
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Live Drivers Fleet & Trip Dispatch Control
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Dedicated Folder: <code>diyataxi/</code>
+            </li>
+          </ul>
+
+          <div class="card-actions">
+            <button type="button" class="btn-launch btn-launch-taxi" onclick="event.stopPropagation(); openService('diyataxi')">
+              <span>Open DiyaTaxi Website</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <span class="btn-port-badge">
+              /diyataxi
+            </span>
+          </div>
+        </article>
+
+        <!-- DIYACAFE -->
+        <article class="service-card card-cafe" id="card-diyacafe" onclick="openService('diyacafe')" style="cursor: pointer;">
+          <div class="card-glow"></div>
+          <div class="card-head">
+            <div class="icon-wrapper icon-cafe">☕</div>
+            <div id="status-cafe" class="status-badge status-live">
+              <span class="pulse-dot"></span> Live Online
+            </div>
+          </div>
+
+          <span class="category-tag cat-cafe">Artisanal Bistro & Drive-In</span>
+          <h3 class="service-title">DiyaCafe</h3>
+          <p class="service-desc">
+            Artisanal Indian bistro & quick-service dining platform featuring authentic dosas, fresh filter coffee, 15 outlets across 5 cities, curbside drive-in pickup, and real-time order tracking.
+          </p>
+
+          <ul class="feature-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Fresh Artisanal Filter Coffee & South Indian Cuisine
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              15 Outlets Across 5 Cities with Curbside Drive-In Bays
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Dedicated Folder: <code>Diya cafe/</code>
+            </li>
+          </ul>
+
+          <div class="card-actions">
+            <button type="button" class="btn-launch btn-launch-cafe" onclick="event.stopPropagation(); openService('diyacafe')">
+              <span>Open DiyaCafe Website</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <span class="btn-port-badge">
+              /diyacafe
+            </span>
+          </div>
+        </article>
+
+        <!-- SERVICE 4: DIYABUZZ -->
+        <article class="service-card card-buzz" id="card-diyabuzz" onclick="openService('diyabuzz')" style="cursor: pointer;">
+          <div class="card-glow"></div>
+          <div class="card-head">
+            <div class="icon-wrapper icon-buzz">🔥</div>
+            <div id="status-buzz" class="status-badge status-live">
+              <span class="pulse-dot"></span> Live Online
+            </div>
+          </div>
+
+          <span class="category-tag cat-buzz">Service 4 • Social & Community</span>
+          <h3 class="service-title">DiyaBuzz</h3>
+          <p class="service-desc">
+            Modern social media and community platform where profiles share trending updates, engage with interactive reactions, comments, media stories, and connect in real time.
+          </p>
+
+          <ul class="feature-list">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Dynamic Feed, Hashtags & Profile Management
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Multi-Emoji Reactions, Comments & Bookmarks
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Dedicated Folder: <code>Diya Buzz/</code>
+            </li>
+          </ul>
+
+          <div class="card-actions">
+            <button type="button" class="btn-launch btn-launch-buzz" onclick="event.stopPropagation(); openService('diyabuzz')">
+              <span>Open DiyaBuzz Website</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+            <span class="btn-port-badge">
+              /diyabuzz
+            </span>
+          </div>
+        </article>
+
+      </section>
+    </main>
+
+    <footer class="hub-footer">
+      <div class="container">
+        DiyaHub Architecture &copy; 2026 • Unified Single-Port Ecosystem Hub
+      </div>
+    </footer>
+  </div>
+
+  <!-- SEAMLESS IN-PAGE EMBEDDED APP VIEWPORT -->
+  <div id="app-viewport">
+    <header class="app-viewport-header">
+      <div class="viewport-left">
+        <button class="btn-back-hub" onclick="closeService()" title="Return to Diya Hub Dashboard">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Return to Diya Hub</span>
+        </button>
+        <div class="active-app-indicator">
+          <span id="activeAppIcon">☕</span>
+          <span id="activeAppTitle">DiyaCafe</span>
+        </div>
+      </div>
+      <div class="viewport-right" style="display: flex; align-items: center; gap: 10px;">
+        <button class="btn-back-hub" onclick="reloadCurrentService()" title="Reload Service">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          <span>Reload</span>
+        </button>
+      </div>
+    </header>
+    <iframe id="service-frame" src="about:blank" title="DiyaHub Service Viewport"></iframe>
+  </div>
+
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

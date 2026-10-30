@@ -1,0 +1,11 @@
+{
+  "name": "diyabuzz",
+  "version": "1.0.0",
+  "description": "DiyaBuzz Social Media Web Application",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["diyabuzz", "social-media", "light-theme"],
+  "author": "",
+  "license": "ISC"
+}

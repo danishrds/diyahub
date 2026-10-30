@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diya Cafe | Artisanal Indian Cafe, Home Delivery & Drive-In Outlets</title>
+  <meta name="description" content="Experience Diya Cafe across Bengaluru, Chennai, Mumbai, Delhi, and Kolkata. Fresh filter coffee, authentic dosas, street snacks, biryanis & swift curbside drive-in service.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E<text y=%2226%22 font-size=%2228%22>☕</text></svg>">
+  <script>
+    (function() {
+      function applyTheme(t) {
+        if (!t) return;
+        document.documentElement.setAttribute('data-theme', t);
+        if (document.body) document.body.setAttribute('data-theme', t);
+      }
+      try {
+        const saved = localStorage.getItem('diyahub_theme');
+        applyTheme(saved || 'light');
+      } catch(e) {
+        applyTheme('light');
+      }
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'set_theme') {
+          applyTheme(e.data.theme);
+        }
+      });
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- 1. CUSTOMER STOREFRONT VIEW (Main Customer Website)       -->
+  <!-- ======================================================== -->
+  <div id="customerStorefrontView">
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-left">
+        <a href="#" class="brand-logo">
+          <div class="logo-icon-wrap">☕</div>
+          <div class="brand-text">
+            <h1>Diya Cafe</h1>
+            <span>Artisanal Bistro & Drive-In</span>
+          </div>
+        </a>
+
+        <!-- Quick City & Mode Switcher in Nav -->
+        <div class="nav-selectors">
+          <div class="city-select-pill" title="Filter by City">
+            <span>📍</span>
+            <select id="navCitySelect" onchange="onNavCityChange(this.value)">
+              <option value="All">All 5 Cities (15 Outlets)</option>
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Kolkata">Kolkata</option>
+            </select>
+          </div>
+
+          <button id="navModeToggleBtn" class="nav-mode-pill delivery-active" onclick="toggleFulfillmentMode()" title="Toggle Delivery or Drive-In mode">
+            <span id="navModeIcon">🛵</span>
+            <span id="navModeLabel">Delivery</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nav Links -->
+      <div class="nav-links">
+        <a href="/" target="_parent" class="nav-link" onclick="if(window.parent!==window){window.parent.postMessage('return_to_hub','*');return false;}" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.06);padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);font-weight:600;color:#f8fafc;" title="Return to Diya Hub Dashboard">
+          <span>⚡</span> DiyaHub
+        </a>
+        <a href="#menu-section" class="nav-link">Menu</a>
+        <a href="#outlets-section" class="nav-link">15 Outlets</a>
+        <a href="#drivein-section" class="nav-link">Drive-In Bay</a>
+        <!-- Store Manager link: Shown only if Customer is logged in -->
+        <a href="javascript:void(0)" onclick="triggerStoreManagerAccess()" id="navStoreManagerLink" class="nav-link" style="display: none; color: var(--primary); font-weight: 700;">
+          <span>⚙️</span> Store Manager
+        </a>
+      </div>
+
+      <!-- Actions -->
+      <div class="nav-actions">
+        <!-- Customer Login / User Profile Area -->
+        <div id="navUserAuthArea">
+          <button class="btn-auth" onclick="openCustomerLoginModal()">
+            <span>👤</span>
+            <span>Customer Login</span>
+          </button>
+        </div>
+
+        <!-- Store Manager Button (Visible ONLY when Customer logs in) -->
+        <button class="btn-store-admin-trigger" id="navStoreManagerBtn" onclick="triggerStoreManagerAccess()" style="display: none;">
+          <span>⚙️</span>
+          <span>Store Manager</span>
+        </button>
+
+        <!-- Track My Order Button (Visible ONLY when Customer logs in) -->
+        <button class="btn-track" id="navTrackBtn" onclick="openOrderTracker()" style="display: none;">
+          <span>📍</span>
+          <span>Track My Order</span>
+        </button>
+
+        <button class="cart-btn" onclick="openCartDrawer()" id="navCartBtn">
+          <span>🛒</span>
+          <span>Cart</span>
+          <span class="cart-count-badge" id="cartCountBadge">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero-section">
+      <div class="hero-background-carousel">
+        <img src="images/hero_cafe.jpg" alt="Diya Cafe Interior" class="hero-bg-img" id="heroBgImage">
+      </div>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge-row">
+            <span class="pulse-dot"></span>
+            <span class="hero-badge-text">Fresh Brews & Street Delights</span>
+          </div>
+
+          <h1 class="hero-title">
+            The Warmth of Coffee.<br>
+            The Soul of <span class="gradient-text">India.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Craving steaming South Indian Filter Coffee, crispy Masala Dosas, or rich Dal Makhani? Enjoy express doorstep delivery or pull up to our contactless drive-in bays for curbside collection.
+          </p>
+
+          <!-- Fulfillment Mode Switcher -->
+          <div class="mode-switch-card">
+            <div class="mode-switch-header">
+              <span>CHOOSE HOW YOU'D LIKE TO ORDER:</span>
+              <span id="selectedOutletTag" style="color: var(--primary);">Indiranagar, Bengaluru</span>
+            </div>
+            <div class="mode-toggle-group">
+              <button class="mode-option-btn active mode-delivery" id="modeBtnDelivery" onclick="setFulfillmentMode('Delivery')">
+                <div class="mode-btn-top">
+                  <span>🛵</span>
+                  <span>Home Delivery</span>
+                </div>
+                <span class="mode-btn-sub">Dispatched hot to your door in ~30 mins</span>
+              </button>
+
+              <button class="mode-option-btn mode-drivein" id="modeBtnDriveIn" onclick="setFulfillmentMode('Self-Collection')">
+                <div class="mode-btn-top">
+                  <span>🚗</span>
+                  <span>Drive-In Collection</span>
+                </div>
+                <span class="mode-btn-sub">Pick up at designated bay without leaving your car</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#menu-section" class="btn-primary">
+              <span>Order From Menu</span>
+              <span>➔</span>
+            </a>
+            <a href="#outlets-section" class="btn-secondary">
+              <span>View 15 Cafe Outlets</span>
+            </a>
+          </div>
+
+          <!-- Live DB Metrics Strip -->
+          <div class="metrics-strip">
+            <div class="metric-item">
+              <span class="metric-number">15</span>
+              <span class="metric-label">Metropolitan Outlets</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-number">28</span>
+              <span class="metric-label">Authentic Dishes</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-number">2,000+</span>
+              <span class="metric-label">Orders Fulfilled</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-number">4.9 ★</span>
+              <span class="metric-label">Customer Rating</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Signature Chef's Special & Live Highlight Showcase -->
+        <div class="hero-showcase">
+          <div class="hero-featured-card">
+            <div class="featured-card-media">
+              <img src="images/hero_food.jpg" alt="Diya Cafe Signature Spread" class="featured-card-img">
+              <div class="featured-overlay-gradient"></div>
+              <div class="featured-pill-badge">
+                <span>✨</span>
+                <span>Signature Cafe Combo</span>
+              </div>
+              <div class="featured-floating-price">
+                <span class="price-from">Special Combo</span>
+                <span class="price-val">₹199</span>
+              </div>
+            </div>
+
+            <div class="featured-card-content">
+              <h3 class="featured-title">Heritage Ghee Dosa & Filter Coffee</h3>
+              <p class="featured-desc">Golden crisp Masala Dosa with spiced potato filling, paired with traditional frothed Filter Coffee in brass dabarah & fresh coconut chutneys.</p>
+
+              <div class="featured-tags">
+                <span class="ftag">🌱 100% Desi Ghee</span>
+                <span class="ftag">⏱️ 10 Mins Fresh Prep</span>
+                <span class="ftag">🔥 Bestseller Combo</span>
+              </div>
+
+              <div class="featured-action-row">
+                <button class="btn-hero-order" onclick="addHeroComboToCart()">
+                  <span>+ Quick Add Combo</span>
+                </button>
+                <span class="featured-rating">⭐ 4.9 (1.4k+ Reviews)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Highlight Floating Badges -->
+          <div class="hero-floating-badges">
+            <div class="hero-floating-pill">
+              <div class="pill-icon">🚗</div>
+              <div class="pill-text">
+                <span class="pill-title">Curbside Drive-In</span>
+                <span class="pill-sub">Hot food brought to your car</span>
+              </div>
+            </div>
+            <div class="hero-floating-pill">
+              <div class="pill-icon">☕</div>
+              <div class="pill-text">
+                <span class="pill-title">Fresh Batch Brews</span>
+                <span class="pill-sub">Brewed every 20 minutes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Drive-In Experience Showcase Banner -->
+    <section class="section" id="drivein-section" style="padding-top: 50px;">
+      <div class="drivein-banner-card">
+        <div class="drivein-banner-content">
+          <div class="drivein-tag">
+            <span>🚗</span>
+            <span>Diya Drive-In & Curbside Collection</span>
+          </div>
+          <h2 class="drivein-banner-title">Zero Wait. Fresh Food Right To Your Car.</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Whether you are on your morning office commute or on a late-night drive, order ahead on DiyaCafe. Pull into your outlet's designated Drive-In Bay, and our barista brings your steaming hot coffee and food to your car window.
+          </p>
+
+          <div class="drivein-steps-list">
+            <div class="drivein-step-box">
+              <div class="step-num">1</div>
+              <div class="step-info">
+                <h4>Order Ahead</h4>
+                <p>Select your favorite dishes and choose 'Drive-In Collection'.</p>
+              </div>
+            </div>
+            <div class="drivein-step-box">
+              <div class="step-num">2</div>
+              <div class="step-info">
+                <h4>Enter Vehicle No</h4>
+                <p>Provide your car/bike number so our team identifies you instantly.</p>
+              </div>
+            </div>
+            <div class="drivein-step-box">
+              <div class="step-num">3</div>
+              <div class="step-info">
+                <h4>Pull Into Bay</h4>
+                <p>Drive to our dedicated curbside collection bay at your selected outlet.</p>
+              </div>
+            </div>
+            <div class="drivein-step-box">
+              <div class="step-num">4</div>
+              <div class="step-info">
+                <h4>Window Delivery</h4>
+                <p>Freshly packed hot boxes & chilled drinks served directly to your car!</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button class="btn-primary" onclick="setFulfillmentMode('Self-Collection'); document.getElementById('menu-section').scrollIntoView({behavior: 'smooth'});">
+              <span>Try Drive-In Order</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="drivein-banner-media">
+          <img src="images/drivein_pickup.jpg" alt="Diya Cafe Drive-In Pickup Lane">
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 Outlets / Hotels Explorer -->
+    <section class="section" id="outlets-section">
+      <div class="section-header">
+        <span class="section-tag">Nationwide Presence</span>
+        <h2 class="section-title">Explore Our 15 Outlets</h2>
+        <p class="section-desc">
+          Handcrafted brews and signature dishes across India's top 5 metropolitan cities. Select your preferred branch for delivery or drive-in pickup.
+        </p>
+      </div>
+
+      <!-- City Filter Tabs -->
+      <div class="city-filter-bar" id="cityFilterBar"></div>
+
+      <!-- Outlets Grid -->
+      <div class="outlets-grid" id="outletsGrid"></div>
+    </section>
+
+    <!-- Interactive Menu Section -->
+    <section class="section" id="menu-section">
+      <div class="section-header">
+        <span class="section-tag">Authentic Recipes & Fresh Brews</span>
+        <h2 class="section-title">Diya Cafe Signature Menu</h2>
+        <p class="section-desc">
+          All 28 iconic dishes from our database — prepared fresh upon order with pure ingredients, authentic spices, and heartfelt love.
+        </p>
+      </div>
+
+      <!-- Menu Controls: Categories, Search, Veg/Non-Veg Filter -->
+      <div class="menu-controls">
+        <div class="menu-filter-row">
+          <div class="category-tabs" id="categoryTabs"></div>
+
+          <div class="menu-search-veg-row">
+            <!-- Search input -->
+            <div class="search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="menuSearchInput" placeholder="Search dosa, coffee, momos..." oninput="onMenuSearch(this.value)">
+            </div>
+
+            <!-- Veg / Non-Veg Toggle -->
+            <div class="veg-toggle-wrap">
+              <button class="veg-btn active" id="filterAllDiet" onclick="setDietaryFilter('All')">All</button>
+              <button class="veg-btn veg-only" id="filterVeg" onclick="setDietaryFilter('Veg')">🟢 Veg Only</button>
+              <button class="veg-btn nonveg-only" id="filterNonVeg" onclick="setDietaryFilter('NonVeg')">🔴 Non-Veg</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu Items Grid -->
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
+  </div>
+  <!-- /customerStorefrontView -->
+
+
+  <!-- ======================================================== -->
+  <!-- 2. STORE MANAGER FULL-PAGE VIEW (Dedicated Admin Portal) -->
+  <!-- ======================================================== -->
+  <div id="storeManagerPageView" class="admin-page-container" style="display: none;">
+    <!-- Store Admin Top Header -->
+    <div class="admin-page-header">
+      <div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="logo-icon-wrap" style="width: 38px; height: 38px; font-size: 1.2rem;">☕</div>
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; margin: 0;">Diya Cafe — Store Manager Portal</h2>
+            <span class="item-badge" style="background: rgba(34, 197, 94, 0.15); color: #22c55e; font-size: 0.72rem;">● SYSTEM OPERATIONAL & LIVE</span>
+          </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.86rem; margin-top: 6px;">Central operational control for 15 Outlets, 500 Customers, 2039 Orders, and 1246 Deliveries.</p>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div class="mgr-header-user">
+          <span>🛡️ Manager:</span>
+          <strong id="adminManagerGreeting" style="color: var(--primary);">Store Admin</strong>
+        </div>
+
+        <button class="btn-primary" onclick="switchViewToStorefront()" style="padding: 10px 20px; font-size: 0.88rem;">
+          <span>⬅️ Back to Cafe Website</span>
+        </button>
+
+        <button class="btn-logout-small" onclick="logoutManager()" style="padding: 10px 16px; font-size: 0.84rem;">
+          <span>🚪 Logout Manager</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Admin Dashboard Container -->
+    <div class="admin-page-body">
+      <!-- KPI Executive Metrics from DB -->
+      <div class="manager-stats-row">
+        <div class="mgr-stat-box">
+          <div class="mgr-stat-num" id="statTotalOrders">2,039</div>
+          <div class="mgr-stat-title">Total Orders (DB)</div>
+        </div>
+        <div class="mgr-stat-box">
+          <div class="mgr-stat-num" id="statTotalCustomers">500</div>
+          <div class="mgr-stat-title">Registered Customers</div>
+        </div>
+        <div class="mgr-stat-box">
+          <div class="mgr-stat-num" id="statTotalDeliveries">1,246</div>
+          <div class="mgr-stat-title">Dispatched Deliveries</div>
+        </div>
+        <div class="mgr-stat-box">
+          <div class="mgr-stat-num" id="statTotalHotels">15</div>
+          <div class="mgr-stat-title">Outlets Across 5 Metros</div>
+        </div>
+      </div>
+
+      <!-- Admin Navigation Tabs -->
+      <div class="admin-tab-nav">
+        <button class="admin-tab-btn active" id="tabBtnOrders" onclick="switchAdminTab('orders')">
+          <span>📋</span>
+          <span>Orders Management</span>
+          <span class="admin-badge-count" id="badgeCountOrders">2039</span>
+        </button>
+
+        <button class="admin-tab-btn" id="tabBtnCustomers" onclick="switchAdminTab('customers')">
+          <span>👥</span>
+          <span>Customer Directory</span>
+          <span class="admin-badge-count" id="badgeCountCustomers">500</span>
+        </button>
+
+        <button class="admin-tab-btn" id="tabBtnDeliveries" onclick="switchAdminTab('deliveries')">
+          <span>🛵</span>
+          <span>Delivery Fleet & Logistics</span>
+          <span class="admin-badge-count" id="badgeCountDeliveries">1246</span>
+        </button>
+
+        <button class="admin-tab-btn" id="tabBtnOutlets" onclick="switchAdminTab('outlets')">
+          <span>🏨</span>
+          <span>15 Outlets</span>
+        </button>
+
+        <button class="admin-tab-btn" id="tabBtnMenu" onclick="switchAdminTab('menu')">
+          <span>🍽️</span>
+          <span>28 Menu Items</span>
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Orders View -->
+      <div id="adminTabContentOrders">
+        <div class="admin-search-bar">
+          <input type="text" class="admin-search-input" id="adminOrderSearch" placeholder="Search by Order ID, Customer Name, or Items..." oninput="onAdminOrderSearch(this.value)">
+          <select class="form-select" id="mgrOutletFilter" onchange="renderAdminOrders()" style="max-width: 220px;">
+            <option value="All">All Outlets</option>
+            <option value="DiyaCafe Indiranagar">DiyaCafe Indiranagar</option>
+            <option value="DiyaCafe Koramangala">DiyaCafe Koramangala</option>
+            <option value="DiyaCafe Whitefield">DiyaCafe Whitefield</option>
+            <option value="DiyaCafe Park Street">DiyaCafe Park Street</option>
+            <option value="DiyaCafe Bandra West">DiyaCafe Bandra West</option>
+            <option value="DiyaCafe Connaught Place">DiyaCafe Connaught Place</option>
+            <option value="DiyaCafe T. Nagar">DiyaCafe T. Nagar</option>
+          </select>
+          <select class="form-select" id="mgrStatusFilter" onchange="renderAdminOrders()" style="max-width: 180px;">
+            <option value="All">All Statuses</option>
+            <option value="Placed">Placed</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Ready">Ready</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
+        <div class="mgr-orders-table-wrap" style="max-height: 520px; overflow-y: auto;">
+          <table class="mgr-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Outlet</th>
+                <th>Dishes Ordered</th>
+                <th>Total (₹)</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="mgrOrdersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Customer Directory (500 Customers) -->
+      <div id="adminTabContentCustomers" style="display: none;">
+        <div class="admin-search-bar">
+          <input type="text" class="admin-search-input" id="adminCustSearch" placeholder="Search 500 customers by Name, Phone, or City..." oninput="onAdminCustomerSearch(this.value)">
+          <select class="form-select" id="adminCustCityFilter" onchange="renderAdminCustomers()" style="max-width: 200px;">
+            <option value="All">All Cities</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Kolkata">Kolkata</option>
+          </select>
+        </div>
+
+        <div class="mgr-orders-table-wrap" style="max-height: 520px; overflow-y: auto;">
+          <table class="mgr-table">
+            <thead>
+              <tr>
+                <th>CID</th>
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Delivery Address</th>
+                <th>Orders Count</th>
+                <th>Total Spent</th>
+              </tr>
+            </thead>
+            <tbody id="mgrCustomersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 3: Delivery Fleet & Logistics (1246 Deliveries) -->
+      <div id="adminTabContentDeliveries" style="display: none;">
+        <div class="admin-search-bar">
+          <input type="text" class="admin-search-input" id="adminDeliverySearch" placeholder="Search deliveries by Delivery Partner, Order ID..." oninput="onAdminDeliverySearch(this.value)">
+          <select class="form-select" id="adminDeliveryStatusFilter" onchange="renderAdminDeliveries()" style="max-width: 200px;">
+            <option value="All">All Delivery Statuses</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Assigned">Assigned</option>
+            <option value="Failed">Failed</option>
+          </select>
+        </div>
+
+        <div class="mgr-orders-table-wrap" style="max-height: 520px; overflow-y: auto;">
+          <table class="mgr-table">
+            <thead>
+              <tr>
+                <th>Delivery ID</th>
+                <th>Order ID</th>
+                <th>Delivery Partner</th>
+                <th>Customer</th>
+                <th>Dispatched Time</th>
+                <th>Completed Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="mgrDeliveriesTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 4: Outlets List (15 Hotels) -->
+      <div id="adminTabContentOutlets" style="display: none;">
+        <div class="mgr-orders-table-wrap" style="max-height: 520px; overflow-y: auto;">
+          <table class="mgr-table">
+            <thead>
+              <tr>
+                <th>Hotel ID</th>
+                <th>Outlet Name</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Coordinates (Lat, Long)</th>
+                <th>Drive-In Bays</th>
+              </tr>
+            </thead>
+            <tbody id="mgrOutletsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 5: Menu List (28 Items) -->
+      <div id="adminTabContentMenu" style="display: none;">
+        <div class="mgr-orders-table-wrap" style="max-height: 520px; overflow-y: auto;">
+          <table class="mgr-table">
+            <thead>
+              <tr>
+                <th>Menu ID</th>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Price (INR)</th>
+              </tr>
+            </thead>
+            <tbody id="mgrMenuTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /storeManagerPageView -->
+
+
+  <!-- ======================================================== -->
+  <!-- 3. MODALS (Customer Login, Manager Login, Cart, Track)   -->
+  <!-- ======================================================== -->
+
+  <!-- Customer Login Modal -->
+  <div class="modal-backdrop" id="customerLoginModalBackdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <button class="modal-close-btn" onclick="closeCustomerLoginModal()">✕</button>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">👤</div>
+        <h3 class="modal-title">Customer Login</h3>
+        <p class="modal-subtitle" style="margin-bottom: 0;">Enter your name to sign in and enjoy customized orders.</p>
+      </div>
+
+      <form id="customerLoginForm" onsubmit="handleCustomerLoginSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="custLoginName">Your Name *</label>
+          <input type="text" class="form-input" id="custLoginName" required placeholder="e.g. Priya Nayak" style="font-size: 1rem; padding: 14px;">
+        </div>
+
+        <!-- Suggestion Pills from DB -->
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label" style="font-size: 0.78rem;">Or Choose a Registered Customer from DB:</label>
+          <div class="quick-profiles-strip" id="loginCustomerPills"></div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 14px;">
+          <span>Sign In as Customer</span>
+          <span>➔</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Store Manager Login Modal -->
+  <div class="modal-backdrop" id="managerLoginModalBackdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <button class="modal-close-btn" onclick="closeManagerLoginModal()">✕</button>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">⚙️</div>
+        <h3 class="modal-title">Store Manager Login</h3>
+        <p class="modal-subtitle" style="margin-bottom: 0;">Enter your Manager Name to access the central store operations & customer database.</p>
+      </div>
+
+      <form id="managerLoginForm" onsubmit="handleManagerLoginSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="mgrLoginName">Store Manager Name *</label>
+          <input type="text" class="form-input" id="mgrLoginName" required placeholder="e.g. Rajesh Kumar" style="font-size: 1rem; padding: 14px;">
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label" style="font-size: 0.78rem;">Quick Sample Manager Profiles:</label>
+          <div class="quick-profiles-strip">
+            <button type="button" class="profile-pill-btn" onclick="fillMgrName('Rajesh Kumar (General Manager)')">👤 Rajesh Kumar (GM)</button>
+            <button type="button" class="profile-pill-btn" onclick="fillMgrName('Kavitha R (Indiranagar Head)')">👤 Kavitha R (Indiranagar)</button>
+            <button type="button" class="profile-pill-btn" onclick="fillMgrName('Arun Sharma (Regional Lead)')">👤 Arun Sharma (Lead)</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 14px; background: linear-gradient(135deg, #f59e0b, #b45309);">
+          <span>Access Store Admin Page</span>
+          <span>➔</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Track My Order Modal -->
+  <div class="modal-backdrop" id="trackerModalBackdrop">
+    <div class="modal-card" style="max-width: 680px;">
+      <button class="modal-close-btn" onclick="closeOrderTracker()">✕</button>
+      <h3 class="modal-title">Track My Order</h3>
+      <p class="modal-subtitle" id="trackMyOrderSubtitle">Live tracking for your active cafe orders.</p>
+
+      <!-- Customer Orders Tabs / Selector -->
+      <div id="customerOrdersPicker" style="margin-bottom: 20px;"></div>
+
+      <!-- Live tracking display card -->
+      <div id="trackerDisplayContent"></div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="handleDrawerBackdropClick(event)">
+    <div class="cart-drawer" id="cartDrawer">
+      <div class="cart-header">
+        <div class="cart-title">Your Cafe Order</div>
+        <button class="btn-close-drawer" onclick="closeCartDrawer()" title="Close cart">✕</button>
+      </div>
+
+      <div class="cart-body" id="cartBody"></div>
+
+      <div class="cart-footer" id="cartFooter"></div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal-backdrop" id="checkoutModalBackdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeCheckoutModal()">✕</button>
+      <h3 class="modal-title" id="checkoutModalTitle">Complete Your Order</h3>
+      <p class="modal-subtitle">Confirm your details for <span id="checkoutModeBadge" style="color: var(--primary); font-weight: 700;">Home Delivery</span></p>
+
+      <!-- Quick Fill Sample Customer Profile from DB -->
+      <div class="form-group">
+        <label class="form-label">1-Click Test Customers (From Database):</label>
+        <div class="quick-profiles-strip" id="quickProfilesStrip"></div>
+      </div>
+
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="custName">Full Name *</label>
+            <input type="text" class="form-input" id="custName" required placeholder="e.g. Priya Nayak">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="custPhone">Mobile Number *</label>
+            <input type="tel" class="form-input" id="custPhone" required placeholder="+91 98765 43210">
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="custCity">City</label>
+            <select class="form-select" id="custCity" onchange="onCheckoutCityChange(this.value)">
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Kolkata">Kolkata</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="custOutlet">Fulfilling Outlet *</label>
+            <select class="form-select" id="custOutlet" required></select>
+          </div>
+        </div>
+
+        <!-- Conditional Delivery Address OR Drive-In Details -->
+        <div id="deliveryFieldsGroup">
+          <div class="form-group">
+            <label class="form-label" for="custAddress">Delivery Address *</label>
+            <input type="text" class="form-input" id="custAddress" placeholder="Flat number, building, street, landmark">
+          </div>
+        </div>
+
+        <div id="driveInFieldsGroup" style="display: none;">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="custVehicle">Vehicle Number (Car / Bike) *</label>
+              <input type="text" class="form-input" id="custVehicle" placeholder="e.g. KA 01 MJ 4210">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custBay">Preferred Collection Bay</label>
+              <select class="form-select" id="custBay">
+                <option value="Bay 1 (Near Entrance)">Bay 1 (Near Entrance)</option>
+                <option value="Bay 2 (Express Lane)">Bay 2 (Express Lane)</option>
+                <option value="Bay 3 (Shaded Canopy)" selected>Bay 3 (Shaded Canopy)</option>
+                <option value="Bay 4 (Curbside)">Bay 4 (Curbside)</option>
+              </select>
+            </div>
+          </div>
+          <div class="cart-outlet-notice" style="margin-top: 0;">
+            <span>🚗</span>
+            <span>Drive into the selected bay. When you arrive, flash your hazard lights or click 'I have arrived' on tracking screen!</span>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="custPayment">Payment Method</label>
+            <select class="form-select" id="custPayment">
+              <option value="UPI">UPI (Google Pay, PhonePe, Paytm)</option>
+              <option value="Card">Credit / Debit Card</option>
+              <option value="COD">Pay On Delivery / Curbside Collection</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="orderNotes">Special Cooking Notes</label>
+            <input type="text" class="form-input" id="orderNotes" placeholder="e.g. Less spicy, extra chutney">
+          </div>
+        </div>
+
+        <div style="margin-top: 10px;">
+          <button type="submit" class="btn-checkout" id="submitOrderBtn">
+            <span>Confirm & Place Order (₹<span id="checkoutSubmitTotal">0</span>)</span>
+            <span>➔</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/db_full.js"></script>
+  <script src="js/db_data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

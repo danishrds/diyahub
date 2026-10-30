@@ -1,0 +1,375 @@
+/* DivaTaxi Live Booking Portal Styling (Light Theme) */
+
+.booking-hero-wrapper {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .booking-hero-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Booking Card */
+.booking-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.booking-panel-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+}
+
+.booking-panel-desc {
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  margin-bottom: 24px;
+}
+
+/* Location Inputs with connecting visual dots */
+.route-inputs-container {
+  position: relative;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.route-indicator-line {
+  position: absolute;
+  left: 20px;
+  top: 32px;
+  bottom: 32px;
+  width: 2px;
+  background: dashed rgba(245, 158, 11, 0.4);
+  z-index: 1;
+}
+
+.input-with-pin {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.pin-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.pin-icon.pickup {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.pin-icon.drop {
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.route-field-wrap {
+  flex: 1;
+}
+
+.route-field-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* Vehicle Selection Tiers */
+.vehicle-selector-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vehicle-tiers-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.vehicle-tier-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.vehicle-tier-card:hover {
+  border-color: #f59e0b;
+  background: #fafaf9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.vehicle-tier-card.selected {
+  border-color: #d97706;
+  background: #fffbeb;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.25), 0 4px 14px rgba(217, 119, 6, 0.12);
+}
+
+.vehicle-tier-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.vehicle-emoji {
+  font-size: 26px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.05);
+  border-radius: 10px;
+}
+
+.vehicle-tier-info h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+
+.vehicle-tier-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vehicle-tier-price {
+  text-align: right;
+}
+
+.vehicle-price-val {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.vehicle-price-eta {
+  font-size: 11px;
+  color: var(--accent-emerald);
+  font-weight: 600;
+}
+
+/* Map Canvas Container */
+.map-view-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  height: 640px;
+  position: relative;
+}
+
+.map-header-bar {
+  padding: 14px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 500;
+}
+
+.map-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#map-container {
+  width: 100%;
+  flex: 1;
+  background: #f1f5f9;
+  z-index: 100;
+}
+
+/* Free OpenStreetMap Clean Light Tiles */
+.map-view-wrapper .leaflet-tile {
+  filter: none;
+}
+
+/* Map Popups */
+.map-popup-card {
+  font-family: var(--font-body);
+  color: #0f172a;
+  padding: 4px;
+}
+
+.popup-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.popup-badge.pickup {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.popup-badge.drop {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.popup-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* Live Simulation Dispatch Modal */
+.dispatch-radar-wrap {
+  text-align: center;
+  padding: 28px 0;
+}
+
+.radar-circle {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 20px auto;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  position: relative;
+}
+
+.radar-circle::after {
+  content: '';
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  opacity: 0;
+  animation: radar-ping 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes radar-ping {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.driver-card-matched {
+  background: #f8fafc;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.driver-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.otp-box {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px dashed var(--primary);
+  border-radius: 8px;
+  padding: 6px 14px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--primary);
+  letter-spacing: 2px;
+}
+
+/* Receipt Stying */
+.receipt-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 22px;
+  margin-top: 16px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 13.5px;
+  color: var(--text-primary);
+}
+
+.receipt-row.total {
+  border-top: 2px dashed rgba(245, 158, 11, 0.4);
+  border-bottom: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 8px;
+  padding-top: 12px;
+}

@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DiyaMart — Premium Fashion & Apparel Retail Hub</title>
+  <meta name="description" content="Shop premium fashion, ethnic wear, footwear and lifestyle accessories at DiyaMart. Complete with customer login, order tracking and integrated store admin portal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%2024%2024%22 fill=%22%23e11d48%22><polygon points=%2212 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2%22/></svg>">
+  <script>
+    (function() {
+      function applyTheme(t) {
+        if (!t) return;
+        document.documentElement.setAttribute('data-theme', t);
+        if (document.body) document.body.setAttribute('data-theme', t);
+      }
+      try {
+        const saved = localStorage.getItem('diyahub_theme');
+        applyTheme(saved || 'light');
+      } catch(e) {
+        applyTheme('light');
+      }
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'set_theme') {
+          applyTheme(e.data.theme);
+        }
+      });
+    })();
+  </script>
+</head>
+<body>
+
+
+  <!-- Top Header Navigation (Visible ONLY inside DiyaMart, Hidden on Dashboard) -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-section" onclick="switchTab('shop')">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">Diya<span class="brand-highlight">Mart</span> <span class="brand-tag">FASHION</span></div>
+          <div class="brand-subtitle" id="brandSubTitle">Apparel, Couture & Lifestyle</div>
+        </div>
+      </div>
+
+      <!-- Customer-Facing Navigation Links -->
+      <nav class="nav-links">
+        <button class="nav-btn nav-hub-return active" onclick="goToDiyaHub()" title="Return to Diya Hub Dashboard">
+          <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Return to Diya Hub
+        </button>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="nav-actions">
+
+
+        <!-- Dynamic Customer Login / Profile Badge -->
+        <div class="auth-header-container">
+          <!-- Shown when NOT logged in -->
+          <button class="nav-login-btn" id="navLoginBtn" onclick="openLoginModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            <span class="auth-text">Login</span>
+          </button>
+
+          <!-- Shown when Logged in -->
+          <div class="user-badge" id="activeCustomerBadge" onclick="openCustomerProfileModal()" style="display: none;" title="My Customer Profile">
+            <span class="avatar-circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </span>
+            <span class="user-name" id="activeCustomerName">Customer</span>
+          </div>
+        </div>
+
+        <!-- Store Admin Button (VISIBLE ONLY AFTER LOGIN) -->
+        <button class="nav-admin-btn" id="navAdminBtn" onclick="handleAdminNavClick()" style="display: none;" title="Access Store Administration Portal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Store Admin</span>
+        </button>
+
+        <!-- Cart / Bag Button -->
+        <button class="cart-btn" id="cartToggleBtn" onclick="toggleCartDrawer()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-text">Bag</span>
+          <span class="cart-badge" id="cartBadgeCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- TAB 1: SHOPPING STOREFRONT / COLLECTIONS (DIYAMART) -->
+    <section id="tab-shop" class="tab-view active">
+      <!-- Return to Diya Hub Breadcrumb -->
+      <div class="hub-return-banner">
+        <button class="btn-return-hub" onclick="goToDiyaHub()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>← Back to Diya Hub (Dashboard)</span>
+        </button>
+        <div class="active-service-pill">
+          <span class="live-dot-pulse"></span>
+          <span>Browsing: <strong>DiyaMart Fashion Storefront</strong></span>
+        </div>
+      </div>
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-content">
+          <span class="hero-tag">Autumn / Festive 2026 Collection</span>
+          <h1>Premium Fashion, Ethnic Wear & Apparel</h1>
+          <p>Explore 48 curated styles across Men's Formal, Pure Silk Sarees, Designer Kurtis, Denim, Footwear & Winterwear with express home delivery.</p>
+          <div class="hero-search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search silk sarees, cotton shirts, blazers, Nike sneakers, Levi's jeans, brands..." oninput="handleSearch(this.value)">
+            <button class="clear-search-btn" id="clearSearchBtn" onclick="clearSearch()" style="display:none;">&times;</button>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-pill">
+            <span class="stat-num" id="heroProductCount">48</span>
+            <span class="stat-label">Curated Styles</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-num" id="heroStoreCount">3</span>
+            <span class="stat-label">Fashion Boutiques</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-num" style="display: flex; align-items: center; gap: 4px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              Express
+            </span>
+            <span class="stat-label">Fast Delivery</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Bar -->
+      <div class="filter-wrapper">
+        <div class="category-chips" id="categoryChips">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Subcategories Pills -->
+        <div class="subcat-pills" id="subcatPills"></div>
+
+        <!-- Sort and Controls Bar -->
+        <div class="filter-controls">
+          <span class="results-count" id="resultsCount">Showing 48 apparel products</span>
+          <div class="sort-box">
+            <label for="sortSelect">Sort By:</label>
+            <select id="sortSelect" onchange="handleSort(this.value)">
+              <option value="id_asc">Featured / Trending</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="name_asc">Apparel Name (A-Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Catalog Grid -->
+      <div class="product-grid" id="productGrid">
+        <div class="loading-spinner">Loading apparel collections...</div>
+      </div>
+    </section>
+
+    <!-- TAB 2: TRACK MY ORDER -->
+    <section id="tab-track" class="tab-view">
+      <div class="view-header">
+        <div>
+          <h2>Track Your Order Status</h2>
+          <p class="section-desc">Check live courier delivery timeline, item details, and invoice summary.</p>
+        </div>
+      </div>
+
+      <!-- Search Box Card -->
+      <div class="track-search-card">
+        <form class="track-form" onsubmit="event.preventDefault(); trackOrderFromInput();">
+          <div class="input-with-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="trackInput" placeholder="Enter your Order ID (e.g. 450, 449, 12) or Phone number..." required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-track">
+            <span>Track Order</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+
+        <div class="quick-samples">
+          <span class="quick-label">Try Sample Orders:</span>
+          <div class="sample-chips" id="sampleOrderChips">
+            <button class="sample-chip" onclick="quickTrack(450)">#450 (Recent)</button>
+            <button class="sample-chip" onclick="quickTrack(449)">#449 (Processing)</button>
+            <button class="sample-chip" onclick="quickTrack(15)">#15 (Delivered)</button>
+            <button class="sample-chip" onclick="quickTrack(1)">#1 (Flagship)</button>
+            <button class="sample-chip" onclick="quickTrack(100)">#100</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Tracking Result Container -->
+      <div id="trackResultContainer" class="track-result-wrapper">
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <h3>Enter an Order ID or Phone number above</h3>
+          <p>Track any placed order to see real-time dispatch and delivery milestones.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: MY ACCOUNT & FASHION REWARDS -->
+    <section id="tab-account" class="tab-view">
+      <div class="view-header">
+        <div>
+          <h2>Fashion Club Rewards & Profile</h2>
+          <p class="section-desc">Manage your customer membership, loyalty points balance, and shopping profile.</p>
+        </div>
+        <div class="customer-switcher-box">
+          <button class="btn btn-outline btn-sm" onclick="openLoginModal()" style="margin-right: 8px;">Switch / Login Profile</button>
+        </div>
+      </div>
+
+      <!-- Customer Profile & Loyalty Card -->
+      <div class="account-card-grid" id="customerProfileCard">
+        <!-- Rendered dynamically in app.js -->
+      </div>
+
+      <!-- Customer's Past Orders -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="card-header">
+          <h3>My Past Orders</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Order Date</th>
+                <th>Channel</th>
+                <th>Payment</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="myOrdersTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: BOUTIQUE LOCATIONS -->
+    <section id="tab-stores" class="tab-view">
+      <div class="view-header">
+        <div>
+          <h2>Visit Our Fashion Boutiques</h2>
+          <p class="section-desc">Experience our collections in person at any of our flagship retail studios.</p>
+        </div>
+      </div>
+
+      <div class="store-cards-grid" id="customerStoreCardsGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 5: UNIFIED STORE ADMIN PORTAL (PROTECTED) -->
+    <section id="tab-admin" class="tab-view">
+      <!-- Admin Portal Header Banner -->
+      <div class="admin-top-banner">
+        <div class="admin-banner-left">
+          <div class="admin-shield-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            STORE ADMIN
+          </div>
+          <div>
+            <h2>DiyaMart Enterprise Retail Administration Hub</h2>
+            <p>Live Store Inventory • Real-time Billing & Invoices • Returns & Exchanges</p>
+          </div>
+        </div>
+
+        <div class="admin-banner-actions">
+          <button class="btn btn-outline btn-sm" onclick="switchTab('shop')">
+            &larr; Return to Storefront
+          </button>
+          <button class="btn btn-danger-outline btn-sm" onclick="logoutAdmin()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Lock / Logout Admin
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin 3-Section Navigation Bar -->
+      <div class="admin-nav-bar">
+        <button class="admin-tab-btn active" data-admin-sec="inventory" onclick="switchAdminSection('inventory')">
+          <svg class="admin-tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          Store Inventory
+        </button>
+        <button class="admin-tab-btn" data-admin-sec="billing" onclick="switchAdminSection('billing')">
+          <svg class="admin-tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          Billing & Invoices
+          <span class="admin-tab-badge" id="adminBillingLiveBadge">LIVE</span>
+        </button>
+        <button class="admin-tab-btn" data-admin-sec="returns" onclick="switchAdminSection('returns')">
+          <svg class="admin-tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Return and Exchange
+          <span class="admin-tab-counter" id="adminReturnsCounter">0</span>
+        </button>
+      </div>
+
+      <!-- ADMIN SECTION 1: STORE INVENTORY -->
+      <div id="admin-sec-inventory" class="admin-section-content active">
+        <!-- Inventory KPI Cards -->
+        <div class="kpi-grid" id="inventoryKpiGrid">
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #e0f2fe; color: #0284c7;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total In-Stock Units</span>
+              <span class="kpi-value" id="adminInvTotalStock">0</span>
+              <span class="kpi-trend positive">Across All Branches</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #fee2e2; color: #dc2626;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Low Stock Alerts</span>
+              <span class="kpi-value" id="adminInvLowStock">0</span>
+              <span class="kpi-trend" id="adminInvLowStockTrend">Below Reorder Level</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #ecfdf5; color: #059669;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total Sold Garments</span>
+              <span class="kpi-value" id="adminInvTotalSold">0</span>
+              <span class="kpi-trend positive">Fulfilled Units</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #fef3c7; color: #d97706;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Damaged / Exchanged</span>
+              <span class="kpi-value" id="adminInvDamaged">0</span>
+              <span class="kpi-trend">Defects & Returns</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory Control Bar -->
+        <div class="admin-controls-card">
+          <div class="admin-filter-group">
+            <div class="control-item">
+              <label>Branch / Store Location:</label>
+              <select id="adminInvStoreFilter" class="form-control" onchange="filterAdminInventory()">
+                <option value="all">All Fashion Branches (Combined)</option>
+                <option value="1">Chennai Flagship</option>
+                <option value="2">Bengaluru Trends</option>
+                <option value="3">Mumbai Studio</option>
+              </select>
+            </div>
+
+            <div class="control-item flex-2">
+              <label>Search Inventory:</label>
+              <input type="text" id="adminInvSearch" class="form-control" placeholder="Search product name, SKU, brand, category, branch..." oninput="filterAdminInventory()">
+            </div>
+
+            <div class="control-item">
+              <label>Filter Stock Level:</label>
+              <select id="adminInvLevelFilter" class="form-control" onchange="filterAdminInventory()">
+                <option value="all">All Items</option>
+                <option value="low">Low Stock Alerts Only</option>
+                <option value="healthy">Healthy Stock Only</option>
+              </select>
+            </div>
+
+            <div class="control-item" style="align-self: flex-end;">
+              <button class="btn btn-outline" onclick="loadAdminInventory(true)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                Refresh Stock
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory Data Table -->
+        <div class="card table-card" style="margin-top: 16px;">
+          <div class="card-header flex-between">
+            <h3 id="adminInvTableTitle">Live Garment Stock Inventory (All Details)</h3>
+            <span class="results-count" id="adminInvResultsCount">Loading stock items...</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Inv ID</th>
+                  <th>SKU</th>
+                  <th>Product Name & Brand</th>
+                  <th>Category</th>
+                  <th>Boutique Branch</th>
+                  <th>Unit Price</th>
+                  <th>Opening</th>
+                  <th>Received</th>
+                  <th>Sold</th>
+                  <th>Damaged</th>
+                  <th>Closing Stock</th>
+                  <th>Reorder Level</th>
+                  <th>Stock Value</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminInventoryTableBody">
+                <!-- Dynamically loaded with all data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN SECTION 2: BILLING & INVOICES -->
+      <div id="admin-sec-billing" class="admin-section-content">
+        <!-- Billing KPI Cards -->
+        <div class="kpi-grid" id="billingKpiGrid">
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #f0fdf4; color: #16a34a;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total Bills Issued</span>
+              <span class="kpi-value" id="adminBillTotalCount">0</span>
+              <span class="kpi-trend positive">All Purchase Channels</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #fdf2f8; color: #db2777;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total Billed Revenue</span>
+              <span class="kpi-value" id="adminBillTotalRevenue">₹0.00</span>
+              <span class="kpi-trend positive">Net Realized</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #eff6ff; color: #2563eb;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="2" y1="20" x2="22" y2="20"></line>
+                <polygon points="12 2 2 7 22 7 12 2"></polygon>
+                <line x1="5" y1="7" x2="5" y2="20"></line>
+                <line x1="19" y1="7" x2="19" y2="20"></line>
+                <line x1="12" y1="7" x2="12" y2="20"></line>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total GST Collected</span>
+              <span class="kpi-value" id="adminBillTotalTax">₹0.00</span>
+              <span class="kpi-trend">CGST + SGST</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #faf5ff; color: #9333ea;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Average Bill Size</span>
+              <span class="kpi-value" id="adminBillAvgValue">₹0.00</span>
+              <span class="kpi-trend">Per Transaction</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Controls Card -->
+        <div class="admin-controls-card">
+          <div class="admin-filter-group">
+            <div class="control-item flex-2">
+              <label>Search Bills / Invoices:</label>
+              <input type="text" id="adminBillSearch" class="form-control" placeholder="Search by Order/Bill #, Customer Name, Phone, Email, Branch..." oninput="filterAdminBilling()">
+            </div>
+            <div class="control-item">
+              <label>Channel:</label>
+              <select id="adminBillChannelFilter" class="form-control" onchange="filterAdminBilling()">
+                <option value="all">All Channels</option>
+                <option value="Web">Web Application</option>
+                <option value="Mobile">Mobile App</option>
+                <option value="Store">In-Store Boutique POS</option>
+              </select>
+            </div>
+            <div class="control-item">
+              <label>Order Status:</label>
+              <select id="adminBillStatusFilter" class="form-control" onchange="filterAdminBilling()">
+                <option value="all">All Statuses</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+              </select>
+            </div>
+            <div class="control-item" style="align-self: flex-end;">
+              <button class="btn btn-outline" onclick="loadAdminBilling(true)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                Refresh Bills
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Billing & Invoices Table -->
+        <div class="card table-card" style="margin-top: 16px;">
+          <div class="card-header flex-between">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h3>Customer Purchases & Live Billing Register (All Transaction Details)</h3>
+              <span class="live-indicator-pill"><span class="pulse-dot"></span> Live Sync</span>
+            </div>
+            <span class="results-count" id="adminBillResultsCount">Showing 0 bills</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Bill / Order #</th>
+                  <th>Invoice Ref</th>
+                  <th>Date & Time</th>
+                  <th>Customer Name & Tier</th>
+                  <th>Contact Info</th>
+                  <th>Boutique Branch</th>
+                  <th>Channel</th>
+                  <th>Gross Total</th>
+                  <th>Discount</th>
+                  <th>GST Tax</th>
+                  <th>Net Bill Amount</th>
+                  <th>Payment Details</th>
+                  <th>Status</th>
+                  <th>Print Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminBillingTableBody">
+                <!-- Dynamically populated with all purchase data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN SECTION 3: RETURN AND EXCHANGE -->
+      <div id="admin-sec-returns" class="admin-section-content">
+        <!-- Return KPI Cards -->
+        <div class="kpi-grid" id="returnsKpiGrid">
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #fef2f2; color: #ef4444;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total Return Requests</span>
+              <span class="kpi-value" id="adminRetTotalCount">0</span>
+              <span class="kpi-trend">Garment Exchanges & Returns</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #ecfdf5; color: #059669;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Approved & Refunded</span>
+              <span class="kpi-value" id="adminRetApprovedCount">0</span>
+              <span class="kpi-trend positive">Settled</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #fffbeb; color: #b45309;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Pending Approval</span>
+              <span class="kpi-value" id="adminRetPendingCount">0</span>
+              <span class="kpi-trend warning">Action Required</span>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background: #f1f5f9; color: #475569;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">Total Refund Value</span>
+              <span class="kpi-value" id="adminRetTotalRefund">₹0.00</span>
+              <span class="kpi-trend">Credited to Shoppers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Returns Control Bar -->
+        <div class="admin-controls-card">
+          <div class="admin-filter-group">
+            <div class="control-item">
+              <label>Status Filter:</label>
+              <select id="adminRetStatusFilter" class="form-control" onchange="filterAdminReturns()">
+                <option value="all">All Return Requests</option>
+                <option value="Pending Approval">Pending Approval</option>
+                <option value="Approved & Refunded">Approved & Refunded</option>
+                <option value="Exchange Dispatched">Exchange Dispatched</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </div>
+            <div class="control-item flex-2">
+              <label>Search Returns:</label>
+              <input type="text" id="adminRetSearch" class="form-control" placeholder="Search by customer, phone, email, product, reason, or order ID..." oninput="filterAdminReturns()">
+            </div>
+            <div class="control-item" style="align-self: flex-end;">
+              <button class="btn btn-outline" onclick="loadAdminReturns(true)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                Refresh Requests
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Returns Data Table -->
+        <div class="card table-card" style="margin-top: 16px;">
+          <div class="card-header flex-between">
+            <h3>Garment Size & Fit Returns / Exchanges Register (All Details)</h3>
+            <span class="results-count" id="adminRetResultsCount">Showing 0 requests</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Return #</th>
+                  <th>Order Item #</th>
+                  <th>Order Ref</th>
+                  <th>Product Name & Brand</th>
+                  <th>Category</th>
+                  <th>Customer Name</th>
+                  <th>Contact Info</th>
+                  <th>Request Date</th>
+                  <th>Return / Exchange Reason</th>
+                  <th>Refund Amount</th>
+                  <th>Refund Date</th>
+                  <th>Status</th>
+                  <th>Admin Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminReturnsTableBody">
+                <!-- Dynamically populated with all return data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- SLIDE-OUT CART / SHOPPING BAG DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCartDrawer(false)"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <h3>Shopping Bag (<span id="cartDrawerCount">0</span>)</h3>
+      </div>
+      <button class="close-drawer-btn" onclick="toggleCartDrawer(false)">&times;</button>
+    </div>
+
+    <div class="cart-drawer-items" id="cartDrawerItems">
+      <div class="empty-cart">
+        <div class="empty-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <h4>Your shopping bag is empty</h4>
+        <p>Explore our fashion collections and add your favorite apparel items.</p>
+        <button class="btn btn-primary" onclick="toggleCartDrawer(false); switchTab('shop');">Start Shopping</button>
+      </div>
+    </div>
+
+    <div class="cart-drawer-footer" id="cartDrawerFooter" style="display:none;">
+      <div class="summary-line">
+        <span>Apparel Subtotal</span>
+        <span id="cartGrossAmount">₹0.00</span>
+      </div>
+      <div class="summary-line">
+        <span>Multi-Buy Discount</span>
+        <span id="cartDiscountAmount" style="color: var(--success-color);">-₹0.00</span>
+      </div>
+      <div class="summary-line">
+        <span>Estimated GST Tax</span>
+        <span id="cartTaxAmount">₹0.00</span>
+      </div>
+      <div class="summary-line total-line">
+        <span>Net Total</span>
+        <span id="cartTotalAmount">₹0.00</span>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="openCheckoutModal()">
+        Proceed to Checkout &rarr;
+      </button>
+      <button class="btn btn-link btn-block" onclick="clearCart()">Clear Bag</button>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          <h3>Complete Your Order</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeCheckoutModal()">&times;</button>
+      </div>
+      <form id="checkoutForm" onsubmit="event.preventDefault(); submitOrder();">
+        <div class="modal-body">
+          <div class="form-section">
+            <label class="form-label">Ordering Customer Profile</label>
+            <select id="checkoutCustomerSelect" class="form-control" required>
+              <!-- Filled with customers -->
+            </select>
+            <span class="form-hint">Fashion Club rewards points will be credited on confirmation.</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-section">
+              <label class="form-label">Fulfillment Boutique</label>
+              <select id="checkoutStoreSelect" class="form-control">
+                <option value="1">DiyaMart Chennai Flagship</option>
+                <option value="2">DiyaMart Bengaluru Trends</option>
+                <option value="3">DiyaMart Mumbai Style Studio</option>
+              </select>
+            </div>
+            <div class="form-section">
+              <label class="form-label">Order Channel</label>
+              <select id="checkoutChannelSelect" class="form-control">
+                <option value="Web">Web Application</option>
+                <option value="Mobile">Mobile App</option>
+                <option value="Store">In-Store Boutique POS</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-section">
+              <label class="form-label">Payment Method</label>
+              <select id="checkoutPaymentSelect" class="form-control">
+                <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+                <option value="Card">Credit / Debit Card</option>
+                <option value="Wallet">DiyaPay / NetBanking</option>
+                <option value="Cash">Cash on Delivery</option>
+              </select>
+            </div>
+            <div class="form-section">
+              <label class="form-label">Delivery Partner</label>
+              <select id="checkoutDeliveryPartner" class="form-control">
+                <option value="DiyaExpress">DiyaExpress (Priority Delivery)</option>
+                <option value="QuickShip">QuickShip Logistics</option>
+                <option value="StorePickup">Store Pickup (Boutique)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="checkout-review-box">
+            <div class="summary-line">
+              <span>Items in Bag:</span>
+              <span id="checkoutItemsCount">0 items</span>
+            </div>
+            <div class="summary-line highlight">
+              <span>Net Payable Amount:</span>
+              <strong id="checkoutFinalAmount">₹0.00</strong>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeCheckoutModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="placeOrderBtn">
+            <span>Confirm & Place Order</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ORDER SUCCESS MODAL -->
+  <div class="modal-backdrop" id="successModal">
+    <div class="modal-card modal-card-sm text-center">
+      <div class="celebration-icon" style="width: 56px; height: 56px; margin: 0 auto 16px; background: #ecfdf5; color: #059669; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2>Order Placed Successfully!</h2>
+      <p class="success-subtitle">Your fashion order has been confirmed.</p>
+      
+      <div class="success-order-box">
+        <div class="order-id-tag">Order <span id="successOrderId">#451</span></div>
+        <div class="order-amount-tag">Paid: <strong id="successOrderAmount">₹0.00</strong></div>
+        <div class="order-txn-tag">TXN Ref: <code id="successTxnRef">TXN0000451</code></div>
+      </div>
+
+      <div class="modal-action-buttons">
+        <button class="btn btn-primary btn-block" onclick="trackNewOrderFromModal()">
+          Track Order Now
+        </button>
+        <button class="btn btn-outline btn-block" onclick="closeSuccessModal()">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER LOGIN & SIGN IN MODAL -->
+  <div class="modal-backdrop" id="customerLoginModal">
+    <div class="modal-card modal-card-sm">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <h3>Customer Login / Sign In</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeLoginModal()">&times;</button>
+      </div>
+      <form id="customerLoginForm" onsubmit="event.preventDefault(); submitCustomerLogin();">
+        <div class="modal-body">
+          <div class="form-section">
+            <label class="form-label">Your Full Name <span style="color: var(--danger-color);">*</span></label>
+            <input type="text" id="loginCustomerName" class="form-control" placeholder="e.g. Priya Sundaram or Aarav" required>
+          </div>
+
+          <div class="form-section">
+            <label class="form-label">Phone Number (Optional)</label>
+            <input type="tel" id="loginCustomerPhone" class="form-control" placeholder="e.g. 9876543210">
+          </div>
+
+          <div class="form-section">
+            <label class="form-label">City (Preferred Location)</label>
+            <select id="loginCustomerCity" class="form-control">
+              <option value="Chennai">Chennai</option>
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Coimbatore">Coimbatore</option>
+            </select>
+          </div>
+
+          <div class="divider-line"><span>or select existing demo profile</span></div>
+
+          <div class="form-section">
+            <label class="form-label">Existing Customer Profiles:</label>
+            <select id="quickProfileSelect" class="form-control" onchange="onQuickProfileSelect(this.value)">
+              <option value="">-- Choose Existing Profile --</option>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeLoginModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <span>Login / Continue</span> &rarr;
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CUSTOMER PROFILE & REWARDS MODAL -->
+  <div class="modal-backdrop" id="customerProfileModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <h3>Customer Profile & Loyalty</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeCustomerProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalCustomerProfileBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer flex-between">
+        <button type="button" class="btn btn-danger-outline" onclick="logoutCustomer()">
+          Logout / Switch User
+        </button>
+        <button type="button" class="btn btn-primary" onclick="closeCustomerProfileModal(); switchTab('account');">
+          View Full Account & Orders
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORE ADMIN SECURITY MATH CHALLENGE MODAL -->
+  <div class="modal-backdrop" id="adminAuthModal">
+    <div class="modal-card modal-card-sm text-center">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <h3>Store Admin Portal Access</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeAdminAuthModal()">&times;</button>
+      </div>
+      <form id="adminAuthForm" onsubmit="event.preventDefault(); submitAdminMathChallenge();">
+        <div class="modal-body">
+          <div class="admin-auth-icon" style="width: 52px; height: 52px; margin: 0 auto 14px; background: #ffe4e6; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+            Please solve the security math challenge below to access the <strong>Store Admin Hub</strong>:
+          </p>
+
+          <!-- Math Question Display Box -->
+          <div class="math-question-card">
+            <div class="math-badge">Security Challenge</div>
+            <div class="math-equation" id="mathQuestionText">Calculate: 15 + 8 = ?</div>
+            <button type="button" class="math-refresh-btn" onclick="generateMathChallenge()" title="Get a new question">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 3px;">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              New Question
+            </button>
+          </div>
+
+          <div class="form-section text-left" style="margin-top: 16px;">
+            <label class="form-label text-left">Your Answer: <span style="color: var(--danger-color);">*</span></label>
+            <input type="number" id="mathAnswerInput" class="form-control text-center math-input" placeholder="Enter number..." required autofocus>
+            <div id="mathErrorMsg" class="auth-error-hint" style="display: none;"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeAdminAuthModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="verifyAdminBtn">
+            <span>Verify & Enter Admin Hub</span> &rarr;
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADJUST INVENTORY STOCK MODAL (ADMIN) -->
+  <div class="modal-backdrop" id="adjustStockModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <h3>Update Garment Stock Levels</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeAdjustStockModal()">&times;</button>
+      </div>
+      <form id="adjustStockForm" onsubmit="event.preventDefault(); submitStockAdjustment();">
+        <input type="hidden" id="adjustInventoryId">
+        <div class="modal-body">
+          <div class="form-section">
+            <label class="form-label">Product SKU & Name</label>
+            <input type="text" id="adjustProductName" class="form-control" readonly disabled>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Boutique Branch</label>
+            <input type="text" id="adjustStoreName" class="form-control" readonly disabled>
+          </div>
+
+          <div class="form-row">
+            <div class="form-section">
+              <label class="form-label">Closing Stock (Units Available)</label>
+              <input type="number" id="adjustClosingQty" class="form-control" min="0" required>
+            </div>
+            <div class="form-section">
+              <label class="form-label">Reorder Alert Level</label>
+              <input type="number" id="adjustReorderLevel" class="form-control" min="1" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-section">
+              <label class="form-label">Received Stock Qty</label>
+              <input type="number" id="adjustReceivedQty" class="form-control" min="0">
+            </div>
+            <div class="form-section">
+              <label class="form-label">Damaged / Defective Qty</label>
+              <input type="number" id="adjustDamagedQty" class="form-control" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeAdjustStockModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Stock Updates</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- GST TAX INVOICE PRINT & PDF MODAL -->
+  <div class="modal-backdrop" id="invoiceModal">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-header no-print">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <h3>Retail Tax Invoice / Cash Bill</h3>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary btn-sm" onclick="printInvoice()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Print / Save as PDF
+          </button>
+          <button class="modal-close-btn" onclick="closeInvoiceModal()">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body invoice-modal-body">
+        <!-- Printable Invoice Area -->
+        <div class="invoice-sheet" id="invoiceSheetContent">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer no-print">
+        <button type="button" class="btn btn-outline" onclick="closeInvoiceModal()">Close</button>
+        <button type="button" class="btn btn-primary" onclick="printInvoice()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print / Save as PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT QUICK VIEW MODAL -->
+  <div class="modal-backdrop" id="productModal">
+    <div class="modal-card modal-card-xl">
+      <div class="modal-header">
+        <h3 id="modalProductName">Apparel Details</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="modal-close-btn" onclick="toggleModalFullscreen('productModal')" title="Toggle Fullscreen" style="font-size: 15px; display: flex; align-items: center; justify-content: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          </button>
+          <button class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modalProductBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SIZE EXCHANGE / RETURN REQUEST MODAL -->
+  <div class="modal-backdrop" id="returnModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <h3>Request Garment Size Exchange / Return</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeReturnModal()">&times;</button>
+      </div>
+      <form id="returnForm" onsubmit="event.preventDefault(); submitReturn();">
+        <div class="modal-body">
+          <div class="form-section">
+            <label class="form-label">Order Item ID</label>
+            <input type="number" id="returnOrderItemId" class="form-control" placeholder="Enter Order Item ID" readonly required>
+          </div>
+          <div class="form-section">
+            <label class="form-label">Reason for Exchange / Return</label>
+            <select id="returnReasonSelect" class="form-control">
+              <option value="Size too small (Exchange for Larger)">Size too small (Exchange for Larger)</option>
+              <option value="Size too large (Exchange for Smaller)">Size too large (Exchange for Smaller)</option>
+              <option value="Fabric / color mismatch">Fabric / color mismatch</option>
+              <option value="Defective stitching / trims">Defective stitching / trims</option>
+              <option value="Changed mind">Changed mind</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeReturnModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toastNotification">
+    <span class="toast-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </span>
+    <span class="toast-msg" id="toastMessage">Action completed successfully</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer no-print">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <strong>DiyaMart Fashion & Apparel</strong> — Unified Retail Platform
+      </div>
+      <div class="footer-meta">
+        <span>100% Authentic Brands • Easy Size Exchanges • Express Delivery • Store Admin Hub</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DiyaBuzz — Modern Social Media Platform</title>
+  <meta name="description" content="DiyaBuzz is a vibrant social media platform where profiles share information, engage with rich reactions, and interact through text replies and action buttons.">
+  
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- Brand Logo -->
+      <a class="brand-wrapper" id="brand-logo" onclick="window.DiyaApp.switchView('feed')">
+        <div class="brand-icon-box">
+          <!-- Diya / Flame Icon -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+          </svg>
+        </div>
+        <span class="brand-title">
+          DiyaBuzz
+          <span class="brand-badge">Light</span>
+        </span>
+      </a>
+
+      <!-- Global Search -->
+      <div class="header-search">
+        <div class="search-input-box">
+          <span class="search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="text" id="global-search" class="search-input" placeholder="Search posts, #tags, or authors (e.g. #celebrations, #tech)...">
+          <button id="search-clear-btn" class="search-clear-btn" title="Clear search">✕</button>
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <a href="/" target="_parent" class="btn-back-hub" onclick="if(window.parent!==window){window.parent.postMessage('return_to_hub','*');return false;}" title="Return to DiyaHub Dashboard">
+          <span>⚡</span> DiyaHub
+        </a>
+
+        <button id="btn-header-new-post" class="btn-new-post">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>New Buzz</span>
+        </button>
+
+        <!-- Logged Out: Login Button -->
+        <button id="btn-header-login" class="btn-header-login" style="display: none;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <span>Log In</span>
+        </button>
+
+        <!-- Logged In: Current User Profile Pill, Manage & Logout -->
+        <div id="header-user-section" style="display: flex; align-items: center; gap: 8px;">
+          <div id="btn-active-user-pill" class="current-user-pill" title="Click to view your profile">
+            <div id="header-user-avatar" class="user-avatar-mini">CJ</div>
+            <div class="user-info-mini">
+              <div id="header-user-name" class="user-name-mini">Chirag Jadhav</div>
+              <div class="user-role-mini">Logged In ▾</div>
+            </div>
+          </div>
+          <!-- Manage Option next to Profile Logout -->
+          <button id="btn-header-manage" class="btn-manage-top" title="Manage Center: Profile & Analytics">
+            ⚙️ Manage
+          </button>
+          <button id="btn-header-logout" class="btn-header-logout" title="Log out of your profile">
+            <span>Log Out Profile</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    <!-- Left Navigation & Current Profile Sidebar -->
+    <aside class="sidebar-left">
+      <!-- Active Profile Card -->
+      <div class="profile-card-sidebar" id="sidebar-profile-card">
+        <div class="profile-card-cover"></div>
+        <div class="profile-card-body" id="sidebar-profile-body">
+          <!-- Populated dynamically via JS for Logged In or Guest state -->
+        </div>
+      </div>
+
+      <!-- Navigation Tabs Card -->
+      <nav class="nav-card">
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item-btn active" data-view="feed" id="nav-btn-feed">
+              <span class="nav-item-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 11a9 9 0 0 1 9 9"></path>
+                  <path d="M4 4a16 16 0 0 1 16 16"></path>
+                  <circle cx="5" cy="19" r="1"></circle>
+                </svg>
+              </span>
+              <span>Home Feed</span>
+              <span class="nav-badge-count" id="badge-total-posts">2.4k</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item-btn" data-view="my-posts" id="nav-btn-my-posts">
+              <span class="nav-item-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span>My Profile & Posts</span>
+              <span class="nav-badge-count" id="badge-my-posts-count">0</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <section class="feed-center">
+      <!-- User Spotlight Banner (Dynamic) -->
+      <div id="feed-user-spotlight" class="user-spotlight-card" style="display: none;">
+        <!-- Populated via JS -->
+      </div>
+
+      <!-- VIEW: Home Feed -->
+      <div id="view-feed" class="view-section active">
+        <!-- Quick Post Compose Box -->
+        <div class="compose-card">
+          <div class="compose-header">
+            <div id="compose-avatar" class="compose-avatar">CJ</div>
+            <textarea id="quick-post-text" class="compose-textarea" placeholder="What's buzzing with you today? Share updates, thoughts, or questions (use #tags)..."></textarea>
+          </div>
+
+          <!-- Optional Media Input Expandable -->
+          <div id="compose-media-box" style="display: none; margin-top: 10px;">
+            <input type="url" id="quick-post-media-url" class="form-input" placeholder="Enter image or video URL (optional)..." style="font-size: 0.85rem;">
+          </div>
+
+          <div class="compose-footer">
+            <div class="compose-tool-btns">
+              <button id="btn-toggle-media-input" class="compose-tool-btn" type="button" title="Add Media">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>Add Media</span>
+              </button>
+
+              <select id="quick-post-status" class="compose-status-select" title="Post Status">
+                <option value="Published">Status: Published</option>
+                <option value="Draft">Status: Draft</option>
+              </select>
+            </div>
+
+            <div class="compose-actions">
+              <button id="btn-submit-quick-post" class="btn-publish-post">
+                <span>Buzz It!</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Sort Bar -->
+        <div class="feed-controls-card">
+          <div class="filter-pills">
+            <button class="filter-pill active" data-filter="all">All Buzz</button>
+            <button class="filter-pill" data-filter="published">Published</button>
+            <button class="filter-pill" data-filter="media">Photos & Videos</button>
+            <button class="filter-pill" data-filter="draft">Drafts</button>
+            <button class="filter-pill" data-filter="my-posts" id="filter-my-posts-pill">My Posts</button>
+          </div>
+
+          <select id="feed-sort-select" class="feed-sort-select">
+            <option value="newest">Sort: Newest First</option>
+            <option value="reactions">Sort: Most Reactions</option>
+            <option value="engagements">Sort: Most Engagements</option>
+          </select>
+        </div>
+
+        <!-- Posts List -->
+        <div id="posts-container" class="post-list">
+          <!-- Dynamically populated by app.js -->
+        </div>
+
+        <!-- Load More Container -->
+        <div style="text-align: center; margin: 10px 0 30px;">
+          <button id="btn-load-more" class="btn-secondary" style="padding: 10px 24px; font-weight: 700;">
+            Load More Posts ▾
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW: Manage Center (Requires Login) -->
+      <div id="view-manage-profiles" class="view-section">
+        <!-- Locked State (When logged out) -->
+        <div id="manage-profiles-locked" class="restricted-access-box" style="display: none; padding: 36px 24px; text-align: center;">
+          <div class="lock-big-icon" style="font-size: 2.8rem; margin-bottom: 8px;">🔑</div>
+          <h2 style="font-family: 'Outfit'; font-size: 1.4rem; font-weight: 800;">Log In to Access Manage Center</h2>
+          <p style="color: var(--text-secondary); max-width: 480px; font-size: 0.92rem; margin: 0 auto 16px;">
+            Enter your name below to instantly log in and access your personal profile details, your posts, and platform analytics.
+          </p>
+          <div style="display: flex; gap: 8px; justify-content: center; align-items: center; max-width: 420px; width: 100%; margin: 0 auto;">
+            <input type="text" id="manage-inline-name-input" class="form-input" placeholder="Enter your name (e.g. Kumaran, Pavithra)..." style="background: var(--bg-surface); font-size: 0.95rem;">
+            <button class="btn-primary" onclick="window.DiyaApp.submitInlineLogin()" style="white-space: nowrap; padding: 11px 22px;">
+              Log In
+            </button>
+          </div>
+          <div id="manage-inline-error-msg" style="display: none; color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-top: 8px;"></div>
+          <div style="margin-top: 18px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">
+              Or click a demo profile:
+            </div>
+            <div class="quick-login-chips" style="justify-content: center;">
+              <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Kumaran Iyengar')">Kumaran Iyengar</button>
+              <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Pavithra Nair')">Pavithra Nair</button>
+              <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Chirag Jadhav')">Chirag Jadhav</button>
+              <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Keerthana Swaminathan')">Keerthana Swaminathan</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unlocked State (When logged in) -->
+        <div id="manage-profiles-unlocked" style="display: none; flex-direction: column; gap: 20px;">
+          <!-- Top Bar -->
+          <div style="background: var(--bg-surface); padding: 18px 22px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h2 style="font-family: 'Outfit'; font-size: 1.45rem; font-weight: 800;">⚙️ Manage: Profile & Analytics</h2>
+              <p style="color: var(--text-muted); font-size: 0.88rem;">Personal profile dashboard and platform analytics overview.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button id="btn-manage-logout" class="btn-manage-logout" onclick="window.DiyaApp.logoutManage()" title="Lock Manage Center (keeps your profile account logged in)">
+                🔒 Lock Manage
+              </button>
+            </div>
+          </div>
+
+          <!-- Analytics & Metrics Dashboard -->
+          <div class="analytics-hero-card">
+            <h3 style="font-family: 'Outfit'; font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">
+              📊 Profile & Platform Analytics
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 18px;">
+              Distribution of 21,940 reactions and community engagements in the DiyaBuzz database.
+            </p>
+
+            <!-- Reaction Distribution Bar -->
+            <div style="font-weight: 700; font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 6px;">
+              Reactions Breakdown (Heart, Thumbs, Happy, Sad, Anger)
+            </div>
+            <div class="reaction-breakdown-bar" id="reaction-stacked-bar">
+              <!-- Colored bars populated via JS -->
+            </div>
+
+            <div class="reaction-legend-grid" id="reaction-legend">
+              <!-- Populated via JS -->
+            </div>
+
+            <!-- Metrics cards row -->
+            <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-top: 18px;">
+              <div class="metric-card" style="padding: 14px;">
+                <span class="metric-value" id="stat-total-published">0</span>
+                <span class="metric-name">Published Posts</span>
+              </div>
+              <div class="metric-card" style="padding: 14px;">
+                <span class="metric-value" id="stat-total-drafts" style="color: var(--warning);">0</span>
+                <span class="metric-name">Draft Posts</span>
+              </div>
+              <div class="metric-card" style="padding: 14px;">
+                <span class="metric-value" id="stat-total-media" style="color: var(--info);">0</span>
+                <span class="metric-name">Media Attachments</span>
+              </div>
+              <div class="metric-card" style="padding: 14px;">
+                <span class="metric-value" id="stat-total-replies" style="color: var(--brand-secondary);">0</span>
+                <span class="metric-name">Replies & Actions</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- All Profiles Details Directory (All 500 Profiles) -->
+          <div style="background: var(--bg-surface); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 style="font-family: 'Outfit'; font-size: 1.25rem; font-weight: 800;">👥 All Profiles Details (<span id="directory-count">500</span> Accounts)</h3>
+                <p style="color: var(--text-muted); font-size: 0.84rem;">Complete profile details for all 500 registered user accounts.</p>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="directory-search-bar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="directory-search" class="form-input" placeholder="Search 500 profiles by name, handle, email, or DOB..." style="border: none; background: transparent; padding: 4px;">
+            </div>
+
+            <!-- Table Wrapper (Full Height, No internal vertical scroll) -->
+            <div class="manage-profiles-table-wrap">
+              <table class="manage-profiles-table">
+                <thead>
+                  <tr>
+                    <th>User Profile</th>
+                    <th>Email / Alternate Email</th>
+                    <th>Date of Birth & Age</th>
+                    <th>Posts</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="manage-profiles-tbody">
+                  <!-- Populated dynamically via JS with all 500 profiles details -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Widgets -->
+    <aside class="sidebar-right">
+      <!-- Platform Stats Widget -->
+      <div class="widget-card">
+        <h3 class="widget-title">
+          <span>Platform Overview</span>
+          <span style="font-size: 0.72rem; color: var(--brand-primary); background: var(--brand-gradient-soft); padding: 2px 8px; border-radius: 9999px;">Live</span>
+        </h3>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span id="widget-stat-profiles" class="metric-value">500</span>
+            <span class="metric-name">Profiles</span>
+          </div>
+          <div class="metric-card">
+            <span id="widget-stat-posts" class="metric-value">2,412</span>
+            <span class="metric-name">Posts</span>
+          </div>
+          <div class="metric-card">
+            <span id="widget-stat-reactions" class="metric-value">21.9k</span>
+            <span class="metric-name">Reactions</span>
+          </div>
+          <div class="metric-card">
+            <span id="widget-stat-engagements" class="metric-value">7.1k</span>
+            <span class="metric-name">Engagements</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trending Hashtags Widget -->
+      <div class="widget-card">
+        <h3 class="widget-title">
+          <span>Trending Buzz</span>
+          <span style="font-size: 0.75rem; color: var(--text-light);">Popular</span>
+        </h3>
+        <div id="trending-tags-container" class="trending-list">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- Suggested Profiles Widget -->
+      <div class="widget-card">
+        <h3 class="widget-title">
+          <span>Explore Creators</span>
+          <button id="btn-refresh-suggested" style="font-size: 0.75rem; color: var(--brand-primary); font-weight: 600;">Refresh ⟳</button>
+        </h3>
+        <div id="suggested-profiles-container" class="suggested-list">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <div class="db-badge-note">
+        ✨ <strong>DiyaBuzz Mock DB</strong> loaded from <code>divabuzz_mock_db.sql</code>. All data operations and reactions persist locally.
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL: Login with Name -->
+  <div id="modal-login" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🔑 Log in to DiyaBuzz</h3>
+        <button class="modal-close-btn" onclick="window.DiyaApp.closeModals()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+          Enter your name to log in, view your personalized profile details, see your posts, and access <strong>Manage</strong>.
+        </p>
+
+        <div class="form-group" style="position: relative;">
+          <label class="form-label" for="login-name-input">Enter Your Name</label>
+          <input type="text" id="login-name-input" class="form-input" placeholder="e.g. Chirag Jadhav, Keerthana Swaminathan..." autocomplete="off">
+          <div id="login-suggestions" class="login-suggestions-box"></div>
+        </div>
+
+        <div style="margin-top: 6px;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">
+            Quick Login Demo Accounts (Click to fill):
+          </div>
+          <div class="quick-login-chips">
+            <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Chirag Jadhav')">Chirag Jadhav</button>
+            <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Keerthana Swaminathan')">Keerthana Swaminathan</button>
+            <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Harleen Jain')">Harleen Jain</button>
+            <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Kumaran Iyengar')">Kumaran Iyengar</button>
+            <button type="button" class="login-chip" onclick="window.DiyaApp.selectQuickLogin('Pavithra Nair')">Pavithra Nair</button>
+          </div>
+        </div>
+
+        <div id="login-error-msg" style="display: none; color: var(--danger); font-size: 0.82rem; font-weight: 600; margin-top: 8px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.DiyaApp.closeModals()">Cancel</button>
+        <button id="btn-submit-login" class="btn-primary">Log In</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- MODAL: Full New Post Creator -->
+  <div id="modal-create-post" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Create a New Buzz</h3>
+        <button class="modal-close-btn" onclick="window.DiyaApp.closeModals()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="modal-post-text">Post Content</label>
+          <textarea id="modal-post-text" class="form-textarea" rows="4" placeholder="What would you like to share with the DiyaBuzz community? Add #hashtags freely!"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-post-media">Media URL (Photo or Video - optional)</label>
+          <input type="url" id="modal-post-media" class="form-input" placeholder="https://example.com/photo.jpg">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-post-status">Publication Status</label>
+          <select id="modal-post-status" class="form-select">
+            <option value="Published">Published (visible to all)</option>
+            <option value="Draft">Draft (saved work)</option>
+            <option value="Archived">Archived</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.DiyaApp.closeModals()">Cancel</button>
+        <button id="btn-modal-submit-post" class="btn-primary">Publish Buzz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Profile Details Viewer -->
+  <div id="modal-profile-details" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Profile Details</h3>
+        <button class="modal-close-btn" onclick="window.DiyaApp.closeModals()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-profile-details-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="divabuzz_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
